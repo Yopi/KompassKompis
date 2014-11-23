@@ -3,9 +3,9 @@ class UsersController < ActionController::Base
     @user = User.find_by(email: params[:email])
     puts params.inspect
     if @user.nil?
-      render status: 404
+      render nothing: true, status: 404
     else
-      render status: 200
+      render nothing: true, status: 200
     end
   end
 
