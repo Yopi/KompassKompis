@@ -196,6 +196,9 @@ function useGeoData(position) {
     url:"/geodata",
     data: { email: email, position: {latitude: latitude, longitude: longitude}},
   });
+
+  direction(latitude, longitude);
+
 }
 
 function handleGeoError(err) {
@@ -223,6 +226,18 @@ function updateHTML() {
   $.get('/compass', function(data){
     $('body').html($(data).find('body'));
   });
+}
+
+function direction(lat, long){
+  for(name in user_friends){
+    var friend_data = $.get('/geodata', {name: name}, function(data){});
+    break;
+  }
+  var friend_lat = friend_data.push[0];
+  var friend_long = friend_data.push[1];
+  var bear = bearing(lat, long, friend_lat, friend_long);
+  console.log(bear);
+
 }
 
 /**
