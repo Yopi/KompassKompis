@@ -33,12 +33,12 @@ function initLogin() {
         email = response.email;
         id = response.id;
         checkUserState(response); // check database for user
+        friends();
       });
     } else {
       console.log('User cancelled login or did not fully authorize.');
     }
   }, {scope: 'public_profile,email', return_scopes: true});
-  friends();
 }
 
 // This is called with the results from from FB.getLoginStatus().
@@ -53,9 +53,6 @@ function statusChangeCallback(response) {
     // Logged into your app and Facebook.
     console.log('Connected');
     friends(); // Get the friends using the app.
-
-
-
     testAPI();
   } else if (response.status === 'not_authorized') {
     // The person is logged into Facebook, but not your app.
@@ -99,6 +96,11 @@ function statusChangeCallback(response) {
       if (response && !response.error) {
         for(friend in response.data) {
           user_friends[friend.id] = friend.name;
+          $.ajax({
+            type: "POST",
+            url:"/friends",
+            data: { name: name, friend_name: friend.name }
+          });
         }
         console.log(response);
       }
