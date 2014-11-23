@@ -97,6 +97,9 @@ function statusChangeCallback(response) {
     "/me/friends",
     function (response) {
       if (response && !response.error) {
+        for(friend in response.data) {
+          user_friends[friend.id] = friend.name;
+        }
         console.log(response);
       }
     }
@@ -193,5 +196,17 @@ function handleGeoError(err) {
     // User said no
     console.log("User does not allow us to check their pos");
   }
+}
 
+function eventLoop() {
+  // Push my location
+  // Get their location
+  $.ajax({
+    type: "GET"
+    url: "/geodata/1",
+    data: { email: email,}
+  })
+  // Update compass
+  // ???
+  // Profit
 }
