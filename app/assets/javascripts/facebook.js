@@ -285,3 +285,8 @@ function _toRad(deg) {
 * @param rad - The radians to be converted into degrees
 * @return degrees
 */
+
+
+_toDeg : function(rad) {
+  return rad * 180 / Math.PI;
+},
