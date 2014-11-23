@@ -1,11 +1,15 @@
 class FriendsController < ActionController::Base
   def create
-    @friend = Friend.new(params[:user])
+    @user = User.find_by(name: params[:name])
+    @friend = User.find_by(name: params[:friend_name])
 
-    if @friend.save
-      render :json, true.to_json
+    friend1 = Friend.new(id: @user.id, friend_id: @friend.id)
+    friend2 = Friend.new(id: @friend.id, friend_id: @user.id)
+
+    if friend1.save && friend2.save
+      render nothing: true, status: 200
     else
-      render :json, false.to_json
+      render nothing: true, status: 400
     end
   end
 end
