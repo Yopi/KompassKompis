@@ -4,7 +4,9 @@ Rails.application.routes.draw do
 
   root 'landing_pages#index'
 
+  get '/login' => 'landing_pages#login'
   resources :users
+  resources :friends
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
