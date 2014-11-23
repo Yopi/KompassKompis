@@ -45,3 +45,4 @@ gem 'spring',        group: :development
 
 # Use HAML
 gem 'haml-rails'
+gem 'compassjs'

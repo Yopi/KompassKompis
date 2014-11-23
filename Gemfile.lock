@@ -43,6 +43,8 @@ GEM
       sass (~> 3.2.19)
     compass-rails (2.0.0)
       compass (>= 0.12.2)
+    compassjs (0.1.1)
+      sprockets (>= 2)
     erubis (2.7.0)
     execjs (2.2.2)
     fssm (0.2.10)
@@ -132,6 +134,7 @@ PLATFORMS
 DEPENDENCIES
   coffee-rails (~> 4.0.0)
   compass-rails
+  compassjs
   haml-rails
   jbuilder (~> 2.0)
   jquery-rails
