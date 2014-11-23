@@ -4,7 +4,13 @@ window.fbAsyncInit = function() {
     xfbml      : true,
     version    : 'v2.2'
   });
+  initLogin();
 };
+
+var name;
+var email;
+var id;
+var user_friends;
 
 (function(d, s, id){
   var js, fjs = d.getElementsByTagName(s)[0];
@@ -14,6 +20,23 @@ window.fbAsyncInit = function() {
     fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));
 
+
+  //login function to call if button not used
+  function initLogin() {
+    FB.login(function(response) {
+      if (response.authResponse) {
+        console.log('Welcome!  Fetching your information.... ');
+        FB.api('/me', function(response) {
+          name = response.name;
+          email = response.email;
+          id = response.id;
+          checkUserState(email); // check database for user
+        });
+      } else {
+        console.log('User cancelled login or did not fully authorize.');
+      }
+    }, {scope: 'public_profile,email,user_friends', return_scopes: true});
+  }
 
   // This is called with the results from from FB.getLoginStatus().
   function statusChangeCallback(response) {
@@ -26,7 +49,10 @@ window.fbAsyncInit = function() {
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
       console.log('Connected');
-      friends();
+      friends(); // Get the friends using the app.
+
+
+
       testAPI();
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
@@ -44,12 +70,12 @@ window.fbAsyncInit = function() {
   // Button.  See the onlogin handler attached to it in the sample
   // code below.
   function checkLoginState() {
+    //initLogin();
     FB.getLoginStatus(function(response) {
       statusChangeCallback(response);
     });
   }
 
-    //FB.login(); Log in pop-up (bad)
 
   // Here we run a very simple test of the Graph API after login is
   // successful.  See statusChangeCallback() for when this call is made.
@@ -62,7 +88,7 @@ window.fbAsyncInit = function() {
     });
   }
 
-  // friends
+  // Here we get the list of friends using the app.
   function friends(){
     FB.api(
     "/me/friends",
@@ -73,3 +99,23 @@ window.fbAsyncInit = function() {
     }
   );
 }
+
+
+  // Check email for in database
+  function checkUserState(user_email){
+    $.ajax({
+      type: "GET",
+      url: "/users",
+      data: { email: user_email},
+      complete: function(xhr, status){
+        if(xhr.status == 404){
+
+        }
+      }
+    })
+  }
+
+   // register user
+   function registerUser(){
+
+   }
