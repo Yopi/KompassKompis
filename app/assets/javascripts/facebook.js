@@ -239,7 +239,7 @@ function updateHTML() {
 function direction(lat, long){
   var friend_lat, friend_long;
   for(name in user_friends){
-    $.get('/geodata/1', {name: name}, function(data){
+    $.get('/geodata/1.json', {name: name}, function(data){
       friend_lat = data.latitude;
       friend_long = data.longitude;
     });
