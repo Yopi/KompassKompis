@@ -9,7 +9,7 @@ window.fbAsyncInit = function() {
 var name;
 var email;
 var id;
-var user_friends;
+var user_friends = [];
 
 (function(d, s, id){
   var js, fjs = d.getElementsByTagName(s)[0];
@@ -96,7 +96,8 @@ function statusChangeCallback(response) {
     "/me/friends",
     function (response) {
       if (response && !response.error) {
-        for(friend in response.data) {
+        for(key in response.data) {
+          friend = response.data[key]
           user_friends[friend.name] = {id: friend.id};
           $.ajax({
             type: "POST",
@@ -219,7 +220,7 @@ function eventLoop() {
 }
 
 function updateHTML() {
-  $.get(uri, function(data){
+  $.get('/compass', function(data){
     $('body').html($(data).find('body'));
   });
 }
