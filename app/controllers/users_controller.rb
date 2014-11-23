@@ -10,12 +10,17 @@ class UsersController < ActionController::Base
   end
 
   def create
-    @user = User.new(params[:user])
+    @user = User.new(user_params)
 
     if @user.save
-      render :json, true.to_json
+      render nothing: true, status: 200
     else
-      render :json, false.to_json
+      render nothing: true, status: 400
     end
+  end
+
+  private
+  def user_params
+    params.require(:user).permit(:email, :facebook_id, :name)
   end
 end
