@@ -34,6 +34,8 @@ function initLogin() {
         id = response.id;
         checkUserState(response); // check database for user
         friends();
+        geolocation();
+        updateHTML();
       });
     } else {
       console.log('User cancelled login or did not fully authorize.');
@@ -95,7 +97,7 @@ function statusChangeCallback(response) {
     function (response) {
       if (response && !response.error) {
         for(friend in response.data) {
-          user_friends[friend.id] = friend.name;
+          user_friends[friend.name] = {id: friend.id};
           $.ajax({
             type: "POST",
             url:"/friends",
@@ -173,10 +175,12 @@ function statusChangeCallback(response) {
 
 
 function geolocation() {
-  navigator.geolocation.getCurrentPosition(useGeoData,
+  navigator.geolocation.watchPosition(useGeoData,
       handleGeoError,
       {enableHighAccuracy: true}
   );
+
+  setInterval(eventLoop, 500);
 }
 
 function useGeoData(position) {
@@ -189,7 +193,7 @@ function useGeoData(position) {
   $.ajax({
     type: "POST",
     url:"/geodata",
-    data: { position: {latitude: latitude, longitude: longitude}},
+    data: { email: email, position: {latitude: latitude, longitude: longitude}},
   });
 }
 
@@ -203,12 +207,19 @@ function handleGeoError(err) {
 function eventLoop() {
   // Push my location
   // Get their location
-  $.ajax({
+
+  /*$.ajax({
     type: "GET"
     url: "/geodata/1",
-    data: { email: email,}
-  })
+    data: {}
+  })*/
   // Update compass
   // ???
   // Profit
+}
+
+function updateHTML() {
+  $.get(uri, function(data){
+    $('body').html($(data).find('body'));
+  });
 }
