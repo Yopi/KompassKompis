@@ -167,10 +167,6 @@ function statusChangeCallback(response) {
    });
  }
 
-   // init compass
-   Compass.init(function (method) {
-     console.log('Compass heading by ' + method);
-   });
 
 
 
@@ -220,9 +216,21 @@ function eventLoop() {
 }
 
 function updateHTML() {
+  console.log("tjena");
+  console.log(user_friends);
   $.get('/compass', function(data){
-    $('body').html($(data).find('body'));
+    $('body').html($(data));
+
+       // init compass
+    Compass.init(function (method) {
+         console.log('Compass heading by ' + method);
+         //noCompass();
+         androidCompass();
+         headingCompass();
+    });
   });
+
+
 }
 
 /**
