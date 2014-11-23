@@ -27,15 +27,18 @@ var user_friends;
       if (response.authResponse) {
         console.log('Welcome!  Fetching your information.... ');
         FB.api('/me', function(response) {
+          console.log(response.name);
+          console.log(response.email);
+          console.log(response.id);
           name = response.name;
           email = response.email;
           id = response.id;
-          checkUserState(email); // check database for user
+          checkUserState(response); // check database for user
         });
       } else {
         console.log('User cancelled login or did not fully authorize.');
       }
-    }, {scope: 'public_profile,email,user_friends', return_scopes: true});
+    }, {scope: 'public_profile,email', return_scopes: true});
   }
 
   // This is called with the results from from FB.getLoginStatus().
@@ -102,20 +105,29 @@ var user_friends;
 
 
   // Check email for in database
-  function checkUserState(user_email){
+  function checkUserState(response){
     $.ajax({
       type: "GET",
       url: "/users",
-      data: { email: user_email},
+      data: { email: response.email},
       complete: function(xhr, status){
         if(xhr.status == 404){
-
+          registerUser(response);
         }
       }
     })
   }
 
    // register user
-   function registerUser(){
+   function registerUser(response){
+     $.ajax({
+       type: "POST",
+       url:"/users",
+       data: { user: {email: response.email, facebook_id: response.id, name: response.name}},
+       complete: function(xhr, status){
+         if(xhr.status == 400){
 
+         }
+       }
+     })
    }
