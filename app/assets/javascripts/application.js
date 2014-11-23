@@ -13,7 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require foundation
+//= require compass
 //= require turbolinks
 //= require_tree .
-
-$(document).foundation();

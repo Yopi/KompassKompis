@@ -4,7 +4,6 @@ window.fbAsyncInit = function() {
     xfbml      : true,
     version    : 'v2.2'
   });
-  initLogin();
 };
 
 var name;
@@ -39,6 +38,7 @@ var user_friends;
         console.log('User cancelled login or did not fully authorize.');
       }
     }, {scope: 'public_profile,email', return_scopes: true});
+    friends();
   }
 
   // This is called with the results from from FB.getLoginStatus().
@@ -73,7 +73,7 @@ var user_friends;
   // Button.  See the onlogin handler attached to it in the sample
   // code below.
   function checkLoginState() {
-    //initLogin();
+    initLogin();
     FB.getLoginStatus(function(response) {
       statusChangeCallback(response);
     });
@@ -82,14 +82,14 @@ var user_friends;
 
   // Here we run a very simple test of the Graph API after login is
   // successful.  See statusChangeCallback() for when this call is made.
-  function testAPI() {
-    console.log('Welcome!  Fetching your information.... ');
-    FB.api('/me', function(response) {
-      console.log('Successful login for: ' + response.name);
-      document.getElementById('status').innerHTML =
-      'Thanks for logging in, ' + response.name + '!';
-    });
-  }
+  // function testAPI() {
+  //   console.log('Welcome!  Fetching your information.... ');
+  //   FB.api('/me', function(response) {
+  //     console.log('Successful login for: ' + response.name);
+  //     document.getElementById('status').innerHTML =
+  //     'Thanks for logging in, ' + response.name + '!';
+  //   });
+  // }
 
   // Here we get the list of friends using the app.
   function friends(){
@@ -131,3 +131,35 @@ var user_friends;
        }
      })
    }
+
+   // if desktop
+   function noCompass(){
+     Compass.noSupport(function () {
+       $('.compass').hide();
+     });
+   }
+
+   // if android
+   function androidCompass(){
+     Compass.needGPS(function () {
+       $('.go-outside-message').show();          // Step 1: we need GPS signal
+     }).needMove(function () {
+       $('.go-outside-message').hide()
+       $('.move-and-hold-ahead-message').show(); // Step 2: user must go forward
+     }).init(function () {
+       $('.move-and-hold-ahead-message').hide(); // GPS hack is enabled
+     });
+   }
+
+   // compass heading listener
+   function headingCompass(){
+   Compass.watch(function (heading) {
+     $('.degrees').text(heading);
+     $('.compass').css('transform', 'rotate(' + (-heading) + 'deg)');
+   });
+ }
+
+   // init compass
+   Compass.init(function (method) {
+     console.log('Compass heading by ' + method);
+   });
