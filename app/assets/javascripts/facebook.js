@@ -20,54 +20,54 @@ var user_friends;
   }(document, 'script', 'facebook-jssdk'));
 
 
-  //login function to call if button not used
-  function initLogin() {
-    FB.login(function(response) {
-      if (response.authResponse) {
-        console.log('Welcome!  Fetching your information.... ');
-        FB.api('/me', function(response) {
-          console.log(response.name);
-          console.log(response.email);
-          console.log(response.id);
-          name = response.name;
-          email = response.email;
-          id = response.id;
-          checkUserState(response); // check database for user
-        });
-      } else {
-        console.log('User cancelled login or did not fully authorize.');
-      }
-    }, {scope: 'public_profile,email', return_scopes: true});
-    friends();
-  }
-
-  // This is called with the results from from FB.getLoginStatus().
-  function statusChangeCallback(response) {
-    console.log('statusChangeCallback');
-    console.log(response);
-    // The response object is returned with a status field that lets the
-    // app know the current login status of the person.
-    // Full docs on the response object can be found in the documentation
-    // for FB.getLoginStatus().
-    if (response.status === 'connected') {
-      // Logged into your app and Facebook.
-      console.log('Connected');
-      friends(); // Get the friends using the app.
-
-
-
-      testAPI();
-    } else if (response.status === 'not_authorized') {
-      // The person is logged into Facebook, but not your app.
-      document.getElementById('status').innerHTML = 'Please log ' +
-      'into this app.';
+//login function to call if button not used
+function initLogin() {
+  FB.login(function(response) {
+    if (response.authResponse) {
+      console.log('Welcome!  Fetching your information.... ');
+      FB.api('/me', function(response) {
+        console.log(response.name);
+        console.log(response.email);
+        console.log(response.id);
+        name = response.name;
+        email = response.email;
+        id = response.id;
+        checkUserState(response); // check database for user
+      });
     } else {
-      // The person is not logged into Facebook, so we're not sure if
-      // they are logged into this app or not.
-      document.getElementById('status').innerHTML = 'Please log ' +
-      'into Facebook.';
+      console.log('User cancelled login or did not fully authorize.');
     }
+  }, {scope: 'public_profile,email', return_scopes: true});
+  friends();
+}
+
+// This is called with the results from from FB.getLoginStatus().
+function statusChangeCallback(response) {
+  console.log('statusChangeCallback');
+  console.log(response);
+  // The response object is returned with a status field that lets the
+  // app know the current login status of the person.
+  // Full docs on the response object can be found in the documentation
+  // for FB.getLoginStatus().
+  if (response.status === 'connected') {
+    // Logged into your app and Facebook.
+    console.log('Connected');
+    friends(); // Get the friends using the app.
+
+
+
+    testAPI();
+  } else if (response.status === 'not_authorized') {
+    // The person is logged into Facebook, but not your app.
+    document.getElementById('status').innerHTML = 'Please log ' +
+    'into this app.';
+  } else {
+    // The person is not logged into Facebook, so we're not sure if
+    // they are logged into this app or not.
+    document.getElementById('status').innerHTML = 'Please log ' +
+    'into Facebook.';
   }
+}
 
   // This function is called when someone finishes with the Login
   // Button.  See the onlogin handler attached to it in the sample
@@ -129,7 +129,7 @@ var user_friends;
 
          }
        }
-     })
+     });
    }
 
    // if desktop
@@ -163,3 +163,35 @@ var user_friends;
    Compass.init(function (method) {
      console.log('Compass heading by ' + method);
    });
+
+
+
+
+function geolocation() {
+  navigator.geolocation.getCurrentPosition(useGeoData,
+      handleGeoError,
+      {enableHighAccuracy: true}
+  );
+}
+
+function useGeoData(position) {
+  var latitude = position.coords.latitude;
+  var longitude = position.coords.longitude;
+
+  console.log(latitude + ", " + longitude);
+
+  // Send geodata to server
+  $.ajax({
+    type: "POST",
+    url:"/geodata",
+    data: { position: {latitude: latitude, longitude: longitude}},
+  });
+}
+
+function handleGeoError(err) {
+  if(err == -1) {
+    // User said no
+    console.log("User does not allow us to check their pos");
+  }
+
+}

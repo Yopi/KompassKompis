@@ -6,8 +6,10 @@ Rails.application.routes.draw do
 
   get '/login' => 'landing_pages#login'
   get '/compass' => 'landing_pages#compass'
+
   resources :users
   resources :friends
+  resources :geodata
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
