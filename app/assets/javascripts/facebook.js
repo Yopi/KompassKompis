@@ -241,8 +241,8 @@ function direction(lat, long){
     var friend_data = $.get('/geodata', {name: name}, function(data){});
     break;
   }
-  var friend_lat = friend_data.push[0];
-  var friend_long = friend_data.push[1];
+  var friend_lat = friend_data[0];
+  var friend_long = friend_data[1];
   var bear = bearing(lat, long, friend_lat, friend_long);
   console.log(bear);
 
