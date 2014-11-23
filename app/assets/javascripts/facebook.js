@@ -287,6 +287,6 @@ function _toRad(deg) {
 */
 
 
-_toDeg : function(rad) {
+function _toDeg(rad) {
   return rad * 180 / Math.PI;
-},
+}
