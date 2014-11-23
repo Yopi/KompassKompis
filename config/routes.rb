@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   root 'landing_pages#index'
 
   get '/login' => 'landing_pages#login'
+  get '/compass' => 'landing_pages#compass'
   resources :users
   resources :friends
 
