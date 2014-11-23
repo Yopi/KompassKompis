@@ -4,4 +4,8 @@ class LandingPagesController < ApplicationController
 
   def login
   end
+
+  def compass
+    
+  end
 end
